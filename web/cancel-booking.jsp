@@ -19,8 +19,8 @@
     Connection conn = null;
     try {
         conn = DatabaseConnection.getConnection();
-        // First verify this booking belongs to the logged-in user and get the flight_id and price
-        String checkSql = "SELECT b.flight_id, b.status, f.price FROM bookings b JOIN flights f ON b.flight_id = f.id WHERE b.id = ? AND b.user_id = ?";
+        // First verify this booking belongs to the logged-in user and get the details
+        String checkSql = "SELECT b.flight_id, b.status, b.flight_class, b.total_fare, b.pdf_generated FROM bookings b WHERE b.id = ? AND b.user_id = ?";
         PreparedStatement checkPst = conn.prepareStatement(checkSql);
         checkPst.setInt(1, bookingId);
         checkPst.setInt(2, user.getId());
@@ -32,10 +32,15 @@
                 response.sendRedirect("mybookings.jsp?err=Booking is already cancelled");
                 return;
             }
+            if (rs.getBoolean("pdf_generated")) {
+                response.sendRedirect("mybookings.jsp?err=Cannot cancel. Official ticket has already been issued.");
+                return;
+            }
             
             int flightId = rs.getInt("flight_id");
-            double price = rs.getDouble("price");
-            double refund = price * 0.50; // 50% refund
+            double totalFare = rs.getDouble("total_fare");
+            String flightClass = rs.getString("flight_class");
+            double refund = totalFare * 0.50; // 50% refund
 
             // Update status to CANCELLED
             String updateBooking = "UPDATE bookings SET status = 'CANCELLED' WHERE id = ?";
@@ -43,11 +48,18 @@
             pstBooking.setInt(1, bookingId);
             pstBooking.executeUpdate();
 
-            // Increment available seats
-            String updateFlight = "UPDATE flights SET available_seats = available_seats + 1 WHERE id = ?";
-            PreparedStatement pstFlight = conn.prepareStatement(updateFlight);
-            pstFlight.setInt(1, flightId);
-            pstFlight.executeUpdate();
+            // Increment available seats for specific class
+            String seatCol = "";
+            if ("Economy".equals(flightClass)) seatCol = "eco_seats";
+            else if ("Business".equals(flightClass)) seatCol = "bus_seats";
+            else if ("First".equals(flightClass)) seatCol = "first_seats";
+
+            if (!seatCol.isEmpty()) {
+                String updateFlight = "UPDATE flights SET " + seatCol + " = " + seatCol + " + 1 WHERE id = ?";
+                PreparedStatement pstFlight = conn.prepareStatement(updateFlight);
+                pstFlight.setInt(1, flightId);
+                pstFlight.executeUpdate();
+            }
 
             // Redirect back with success message
             String successMsg = "Booking Cancelled Successfully. A refund of Rs." + refund + " (50%) will be credited to your original payment method in 3-5 business days.";

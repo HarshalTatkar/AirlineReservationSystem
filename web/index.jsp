@@ -113,33 +113,18 @@
                                 class="form-control"
                                 required>
 
-                            <option value="">
-                                Select departure city
-                            </option>
-
-                            <option value="Mumbai">
-                                Mumbai (BOM)
-                            </option>
-
-                            <option value="Delhi">
-                                Delhi (DEL)
-                            </option>
-
-                            <option value="Bangalore">
-                                Bangalore (BLR)
-                            </option>
-
-                            <option value="Chennai">
-                                Chennai (MAA)
-                            </option>
-
-                            <option value="Hyderabad">
-                                Hyderabad (HYD)
-                            </option>
-
-                            <option value="Kolkata">
-                                Kolkata (CCU)
-                            </option>
+                            <option value="">Select departure city</option>
+                            <option value="Ahmedabad">Ahmedabad (AMD)</option>
+                            <option value="Bangalore">Bangalore (BLR)</option>
+                            <option value="Chennai">Chennai (MAA)</option>
+                            <option value="Delhi">Delhi (DEL)</option>
+                            <option value="Goa">Goa (GOI)</option>
+                            <option value="Hyderabad">Hyderabad (HYD)</option>
+                            <option value="Jaipur">Jaipur (JAI)</option>
+                            <option value="Kochi">Kochi (COK)</option>
+                            <option value="Kolkata">Kolkata (CCU)</option>
+                            <option value="Mumbai">Mumbai (BOM)</option>
+                            <option value="Pune">Pune (PNQ)</option>
 
                         </select>
 
@@ -161,33 +146,18 @@
                                 class="form-control"
                                 required>
 
-                            <option value="">
-                                Select destination city
-                            </option>
-
-                            <option value="Mumbai">
-                                Mumbai (BOM)
-                            </option>
-
-                            <option value="Delhi">
-                                Delhi (DEL)
-                            </option>
-
-                            <option value="Bangalore">
-                                Bangalore (BLR)
-                            </option>
-
-                            <option value="Chennai">
-                                Chennai (MAA)
-                            </option>
-
-                            <option value="Hyderabad">
-                                Hyderabad (HYD)
-                            </option>
-
-                            <option value="Kolkata">
-                                Kolkata (CCU)
-                            </option>
+                            <option value="">Select destination city</option>
+                            <option value="Ahmedabad">Ahmedabad (AMD)</option>
+                            <option value="Bangalore">Bangalore (BLR)</option>
+                            <option value="Chennai">Chennai (MAA)</option>
+                            <option value="Delhi">Delhi (DEL)</option>
+                            <option value="Goa">Goa (GOI)</option>
+                            <option value="Hyderabad">Hyderabad (HYD)</option>
+                            <option value="Jaipur">Jaipur (JAI)</option>
+                            <option value="Kochi">Kochi (COK)</option>
+                            <option value="Kolkata">Kolkata (CCU)</option>
+                            <option value="Mumbai">Mumbai (BOM)</option>
+                            <option value="Pune">Pune (PNQ)</option>
 
                         </select>
 

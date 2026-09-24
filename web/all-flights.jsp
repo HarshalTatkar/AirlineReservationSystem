@@ -33,7 +33,7 @@
                 try {
                     conn = DatabaseConnection.getConnection();
                     if (conn != null) {
-                        String sql = "SELECT * FROM flights WHERE available_seats > 0 ORDER BY departure_time ASC";
+                        String sql = "SELECT * FROM flights WHERE (eco_seats > 0 OR bus_seats > 0 OR first_seats > 0) ORDER BY departure_time ASC";
                         PreparedStatement pst = conn.prepareStatement(sql);
                         ResultSet rs = pst.executeQuery();
                         
@@ -65,16 +65,14 @@
                                     </div>
 
                                     <div class="flight-price">
-                                        <div class="price">₹<%= rs.getDouble("price") %></div>
+                                        <div class="price">From ₹<%= rs.getDouble("eco_price") %></div>
                                         <div class="price-label">per passenger</div>
-                                        <div class="seats-available"><%= rs.getInt("available_seats") %> seats available</div>
+                                        <div class="seats-available">
+                                            <span style="font-size: 11px;">ECO: <%= rs.getInt("eco_seats") %> | BUS: <%= rs.getInt("bus_seats") %> | 1ST: <%= rs.getInt("first_seats") %></span>
+                                        </div>
                                         <br>
-                                        <form action="${pageContext.request.contextPath}/booking.jsp" method="post">
+                                        <form action="${pageContext.request.contextPath}/booking.jsp" method="get">
                                             <input type="hidden" name="flightId" value="<%= rs.getInt("id") %>">
-                                            <input type="hidden" name="flightNumber" value="<%= rs.getString("flight_number") %>">
-                                            <input type="hidden" name="origin" value="<%= rs.getString("origin") %>">
-                                            <input type="hidden" name="destination" value="<%= rs.getString("destination") %>">
-                                            <input type="hidden" name="price" value="<%= rs.getDouble("price") %>">
                                             <button type="submit" class="btn btn-primary btn-small">Book Now</button>
                                         </form>
                                     </div>

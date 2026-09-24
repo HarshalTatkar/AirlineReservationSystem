@@ -87,25 +87,71 @@
                     </div>
                     <div class="form-group">
                         <label>Origin</label>
-                        <input type="text" name="origin" class="form-control" required placeholder="e.g. Mumbai">
+                        <select name="origin" class="form-control" required>
+                            <option value="">Select Origin</option>
+                            <option value="Ahmedabad">Ahmedabad (AMD)</option>
+                            <option value="Bangalore">Bangalore (BLR)</option>
+                            <option value="Chennai">Chennai (MAA)</option>
+                            <option value="Delhi">Delhi (DEL)</option>
+                            <option value="Goa">Goa (GOI)</option>
+                            <option value="Hyderabad">Hyderabad (HYD)</option>
+                            <option value="Jaipur">Jaipur (JAI)</option>
+                            <option value="Kochi">Kochi (COK)</option>
+                            <option value="Kolkata">Kolkata (CCU)</option>
+                            <option value="Mumbai">Mumbai (BOM)</option>
+                            <option value="Pune">Pune (PNQ)</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>Destination</label>
-                        <input type="text" name="destination" class="form-control" required placeholder="e.g. Delhi">
+                        <select name="destination" class="form-control" required>
+                            <option value="">Select Destination</option>
+                            <option value="Ahmedabad">Ahmedabad (AMD)</option>
+                            <option value="Bangalore">Bangalore (BLR)</option>
+                            <option value="Chennai">Chennai (MAA)</option>
+                            <option value="Delhi">Delhi (DEL)</option>
+                            <option value="Goa">Goa (GOI)</option>
+                            <option value="Hyderabad">Hyderabad (HYD)</option>
+                            <option value="Jaipur">Jaipur (JAI)</option>
+                            <option value="Kochi">Kochi (COK)</option>
+                            <option value="Kolkata">Kolkata (CCU)</option>
+                            <option value="Mumbai">Mumbai (BOM)</option>
+                            <option value="Pune">Pune (PNQ)</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label>Price (₹)</label>
-                        <input type="number" name="price" class="form-control" required step="0.01">
+                        <label>Departure Time</label>
+                        <input type="datetime-local" name="departure" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Economy Seats</label>
+                        <input type="number" name="ecoSeats" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label>Available Seats</label>
-                        <input type="number" name="seats" class="form-control" required>
+                        <label>Economy Price (₹)</label>
+                        <input type="number" name="ecoPrice" class="form-control" required step="0.01">
                     </div>
+
+                    <div class="form-group">
+                        <label>Business Seats</label>
+                        <input type="number" name="busSeats" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Business Price (₹)</label>
+                        <input type="number" name="busPrice" class="form-control" required step="0.01">
+                    </div>
+
+                    <div class="form-group">
+                        <label>First Class Seats</label>
+                        <input type="number" name="firstSeats" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>First Class Price (₹)</label>
+                        <input type="number" name="firstPrice" class="form-control" required step="0.01">
+                    </div>
+
                     <div class="form-group" style="grid-column: span 2;">
-                        <label>Departure Time (YYYY-MM-DD HH:MM:SS)</label>
-                        <input type="text" name="departure" class="form-control" required placeholder="2026-10-15 10:00:00">
-                    </div>
-                    <div class="form-group" style="grid-column: span 1;">
                         <label>&nbsp;</label>
                         <button type="submit" class="btn btn-primary" style="width: 100%; height: 52px;">Add Flight</button>
                     </div>
@@ -123,8 +169,9 @@
                             <th>Origin</th>
                             <th>Destination</th>
                             <th>Departure</th>
-                            <th>Price</th>
-                            <th>Seats</th>
+                            <th>Economy</th>
+                            <th>Business</th>
+                            <th>First</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -145,8 +192,9 @@
                                             <td><%= rs.getString("origin") %></td>
                                             <td><%= rs.getString("destination") %></td>
                                             <td><%= rs.getTimestamp("departure_time") %></td>
-                                            <td>₹<%= rs.getDouble("price") %></td>
-                                            <td><%= rs.getInt("available_seats") %></td>
+                                            <td><%= rs.getInt("eco_seats") %> (₹<%= rs.getDouble("eco_price") %>)</td>
+                                            <td><%= rs.getInt("bus_seats") %> (₹<%= rs.getDouble("bus_price") %>)</td>
+                                            <td><%= rs.getInt("first_seats") %> (₹<%= rs.getDouble("first_price") %>)</td>
                                             <td>
                                                 <form action="admin-action.jsp" method="post" style="margin:0;">
                                                     <input type="hidden" name="action" value="delete">

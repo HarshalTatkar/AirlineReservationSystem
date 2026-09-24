@@ -51,8 +51,8 @@
                     Connection conn = null;
                     try {
                         conn = DatabaseConnection.getConnection();
-                        String sql = "SELECT b.id AS booking_id, b.status, b.passenger_name, b.booking_date, " +
-                                     "f.flight_number, f.origin, f.destination, f.departure_time, f.arrival_time, f.price " +
+                        String sql = "SELECT b.id AS booking_id, b.status, b.passenger_name, b.booking_date, b.flight_class, b.total_fare, b.pdf_generated, " +
+                                     "f.flight_number, f.origin, f.destination, f.departure_time, f.arrival_time " +
                                      "FROM bookings b JOIN flights f ON b.flight_id = f.id " +
                                      "WHERE b.user_id = ? ORDER BY b.id DESC";
                         PreparedStatement pst = conn.prepareStatement(sql);
@@ -66,6 +66,7 @@
                             String status = rs.getString("status");
                             if (status == null) status = "CONFIRMED"; // fallback if schema doesn't have default
                             
+                            boolean pdfGenerated = rs.getBoolean("pdf_generated");
                             String badgeClass = status.equals("CANCELLED") ? "sold-out" : "seats-available";
             %>
                             <div class="booking-card" style="background:#fff; border-radius:15px; padding:25px; margin-bottom:20px; box-shadow:0 4px 15px rgba(0,0,0,0.03); border:1px solid #e2e8f0;">
@@ -86,14 +87,23 @@
                                     
                                     <div style="flex:1; border-left:1px solid #e2e8f0; padding-left:30px;">
                                         <div style="margin-bottom:8px;"><span style="color:#64748b;">Passenger:</span> <strong><%= rs.getString("passenger_name") %></strong></div>
-                                        <div style="margin-bottom:8px;"><span style="color:#64748b;">Total Fare:</span> <strong>₹<%= rs.getDouble("price") %></strong></div>
+                                        <div style="margin-bottom:8px;"><span style="color:#64748b;">Class:</span> <strong><%= rs.getString("flight_class") %></strong></div>
+                                        <div style="margin-bottom:8px;"><span style="color:#64748b;">Fare Paid:</span> <strong>₹<%= rs.getDouble("total_fare") %></strong></div>
                                         <div><span style="color:#64748b;">Booked On:</span> <strong><%= rs.getTimestamp("booking_date") %></strong></div>
                                     </div>
                                     
                                     <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-end;">
-                                        <a href="booking-confirmation.jsp" class="btn btn-outline" style="padding:8px 20px; border:2px solid #3b82f6; color:#3b82f6; border-radius:8px;">View Details</a>
-                                        
-                                        <% if (!"CANCELLED".equals(status)) { %>
+                                        <% if (pdfGenerated) { %>
+                                            <span style="color: #ef4444; font-size: 12px; font-weight: bold; margin-bottom: 5px;">NON-REFUNDABLE (TICKET ISSUED)</span>
+                                            <form action="lock-tickets.jsp" method="post" style="margin: 0;">
+                                                <input type="hidden" name="bookingIds" value="<%= rs.getInt("booking_id") %>">
+                                                <button type="submit" class="btn" style="background:#0f172a; color:#fff; padding:8px 20px; border-radius:8px;">View PDF Ticket</button>
+                                            </form>
+                                        <% } else if (!"CANCELLED".equals(status)) { %>
+                                            <form action="lock-tickets.jsp" method="post" style="margin: 0;">
+                                                <input type="hidden" name="bookingIds" value="<%= rs.getInt("booking_id") %>">
+                                                <button type="submit" class="btn" style="background:#0f172a; color:#fff; padding:8px 20px; border-radius:8px;">Download Ticket</button>
+                                            </form>
                                             <a href="cancel-booking.jsp?bookingId=<%= rs.getInt("booking_id") %>" class="btn" style="background:#ef4444; color:#fff; padding:8px 20px; border-radius:8px;" onclick="return confirm('Are you sure you want to cancel this booking? Cancellation charges may apply.');">Cancel Booking</a>
                                         <% } %>
                                     </div>

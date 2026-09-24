@@ -84,16 +84,11 @@
 
                                 <!-- Price -->
                                 <div class="flight-price">
-                                    <div class="price">₹${flight.price}</div>
+                                    <div class="price">From ₹${flight.price}</div>
                                     <div class="price-label">per passenger</div>
-                                    <div class="seats-available">${flight.availableSeats} seats available</div>
                                     <br>
-                                    <form action="${pageContext.request.contextPath}/booking.jsp" method="post">
+                                    <form action="${pageContext.request.contextPath}/booking.jsp" method="get">
                                         <input type="hidden" name="flightId" value="${flight.id}">
-                                        <input type="hidden" name="flightNumber" value="${flight.flightNumber}">
-                                        <input type="hidden" name="origin" value="${flight.origin}">
-                                        <input type="hidden" name="destination" value="${flight.destination}">
-                                        <input type="hidden" name="price" value="${flight.price}">
                                         <button type="submit" class="btn btn-primary btn-small">Book Now</button>
                                     </form>
                                 </div>

@@ -34,11 +34,11 @@ public class FlightSearchServlet extends HttpServlet {
                 PreparedStatement pst;
                 
                 if (origin == null || origin.trim().isEmpty()) {
-                    sql = "SELECT * FROM flights WHERE destination = ? AND available_seats > 0";
+                    sql = "SELECT * FROM flights WHERE destination = ? AND (eco_seats > 0 OR bus_seats > 0 OR first_seats > 0)";
                     pst = conn.prepareStatement(sql);
                     pst.setString(1, destination);
                 } else {
-                    sql = "SELECT * FROM flights WHERE origin = ? AND destination = ? AND available_seats > 0";
+                    sql = "SELECT * FROM flights WHERE origin = ? AND destination = ? AND (eco_seats > 0 OR bus_seats > 0 OR first_seats > 0)";
                     pst = conn.prepareStatement(sql);
                     pst.setString(1, origin);
                     pst.setString(2, destination);
@@ -53,8 +53,9 @@ public class FlightSearchServlet extends HttpServlet {
                     flight.setDestination(rs.getString("destination"));
                     flight.setDepartureTime(rs.getTimestamp("departure_time"));
                     flight.setArrivalTime(rs.getTimestamp("arrival_time"));
-                    flight.setPrice(rs.getDouble("price"));
-                    flight.setAvailableSeats(rs.getInt("available_seats"));
+                    // We will set the base price to eco_price for backward compatibility in search
+                    flight.setPrice(rs.getDouble("eco_price"));
+                    flight.setAvailableSeats(rs.getInt("eco_seats") + rs.getInt("bus_seats") + rs.getInt("first_seats"));
                     
                     flights.add(flight);
                 }
